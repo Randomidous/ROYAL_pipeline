@@ -18,10 +18,10 @@
        - *write_data
 
    - Toolboxes:
-       - NIRS Toolbox
-       - Homer3 with dependencies
-       - SNIRF
-       - FieldTrip
+       - NIRS Toolbox (https://github.com/huppertt/nirs-toolbox)
+       - Homer3 with dependencies (https://github.com/BUNPC/Homer3) 
+       - SNIRF (https://github.com/fNIRS/snirf/tree/master) 
+       - FieldTrip (https://github.com/fieldtrip/fieldtrip)
 
    See also:
    - ROYAL_data2bids

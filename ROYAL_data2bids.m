@@ -1404,9 +1404,9 @@ if need_channels_tsv
     end
 
     % channel information can come from the header and from cfg.channels
-    % channels_tsv = hdr2table(hdr); % a royal addition
-    % channels_tsv = mergetable(channels_tsv, cfg.channels, 'name'); % a royal addition
-    channels_tsv = cfg.channels;
+    channels_tsv = hdr2table(hdr); 
+    channels_tsv = mergetable(channels_tsv, cfg.channels, 'name');
+    % channels_tsv = cfg.channels; % a royal addition
 
     % columns should appear in a specific order
     if need_nirs_json
@@ -1526,18 +1526,20 @@ end % need_electrodes_tsv
 if need_optodes_tsv
 
     % try to get the opto structure from the configuration or data
-    try
-        tmpcfg = keepfields(cfg, {'opto'});
-        tmpcfg.senstype='nirs';
-        if ~isempty(varargin)
-            opto = ft_fetch_sens(tmpcfg, varargin{1});
-        elseif exist('hdr', 'var') && isfield(hdr, 'opto')
-            opto = hdr.opto;
-        else
-            opto = ft_fetch_sens(tmpcfg);
+    if ~exist('opto', 'var') % a royal addition
+        try
+            tmpcfg = keepfields(cfg, {'opto'});
+            tmpcfg.senstype='nirs';
+            if ~isempty(varargin)
+                opto = ft_fetch_sens(tmpcfg, varargin{1});
+            elseif exist('hdr', 'var') && isfield(hdr, 'opto')
+                opto = hdr.opto;
+            else
+                opto = ft_fetch_sens(tmpcfg);
+            end
+        catch
+            opto = [];
         end
-    catch
-        opto = [];
     end
 
     if isstruct(cfg.optodes)
@@ -1558,10 +1560,14 @@ if need_optodes_tsv
 
     % optode details can be specified in cfg.opto, data.opto or cfg.optodes
     optodes_tsv = opto2table(opto);                              % this includes the cfg.opto and data.opto
-    optodes_tsv = mergetable(optodes_tsv, cfg.optodes, 'name'); % this includes the cfg.optodes
+    optodes_tsv = mergetable(optodes_tsv, cfg.optodes, 'name');  % this includes the cfg.optodes
 
-    % the default for cfg.electrodes consists of one row where all values are nan, this needs to be removed
-    keep = false(size(optodes_tsv.name));
+    try
+        % the default for cfg.electrodes consists of one row where all values are nan, this needs to be removed
+        keep = false(size(optodes_tsv.name));
+    catch
+    disp('error')
+    end
     for i=1:numel(optodes_tsv.name)
         keep(i) = ischar(optodes_tsv.name{i});
     end

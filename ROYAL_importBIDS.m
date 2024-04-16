@@ -32,11 +32,12 @@
 %   - ROYAL_write_data
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                                         %
-                                                                         %
-% confirgurations                                                        %
-cfg                                     = [];                            %
-core_cfg                                = [];                            %
+                                                                         
+                                                                         
+% configurations
+clear all
+cfg                                     = [];                            
+core_cfg                                = [];                            
 
 % folder setup
 core_cfg.rootDir                        = 'C:\Users\ericw\Desktop\UHH_fNIRS\study_folder\data'; % Define study folder
@@ -53,10 +54,13 @@ core_cfg.tasks                          = { 'baseline', 'STwalking', 'STvisual',
 cfg.method                              = 'convert';
 cfg.writejson                           = 'replace';
 cfg.writetsv                            = 'replace';
+% cfg.presentationfile                    = '         ';
+% cfg.markerstreams                       = '         ';
 
 % data2bids specifications
 for subj                                = 1:core_cfg.numSubjects
 
+    cfg.subject                         = subj;
     subjectID                           = sprintf( 'sub-%02d', subj );                          % format: 'sub-XX'
 
     for sess                            = 1:length(core_cfg.sessions)                           % iterate over all sessions (pre, post)
@@ -76,18 +80,19 @@ for subj                                = 1:core_cfg.numSubjects
             core_cfg.subj               = subj;
 
 
-            filename                    = [subjectID '_' sessionID '_' taskID '.xdf'];
-            cfg.dataset                 = filename;
+            xdffilename                 = [subjectID '_' sessionID '_' taskID '.xdf'];
+            cfg.dataset                 = xdffilename;
+            cfg.filename                = [ directory '\' xdffilename ];
 
             % skip if file doesn't exist
-            if ~exist(filename)
+            if ~exist(xdffilename)  
                 continue
             end
 
             % the following settings relate to the directory structure and file names
             cfg.bidsroot                = core_cfg.bidsDir;
             cfg.sub                     = num2str(subj);
-            cfg.ses                     = core_cfg.sessions{sess};
+            cfg.session                 = core_cfg.sessions{sess};
             cfg.task                    = taskID;
             cfg.datatype                = 'nirs';
             % cfg.run                   = [1];
@@ -129,6 +134,8 @@ for subj                                = 1:core_cfg.numSubjects
             cfg.CogPOID                                 = 'string';
 
             % nirs specific fields
+            cfg.nirs                                    = [];
+            cfg.nirs.stream_name                        = 'Aurora';
 
             % cfg.nirs.CapManufacturer                   = ft_getopt(cfg.nirs, 'CapManufacturer'                   );
             % cfg.nirs.CapManufacturersModelName         = ft_getopt(cfg.nirs, 'CapManufacturersModelName'         );
@@ -159,12 +166,15 @@ for subj                                = 1:core_cfg.numSubjects
 
             % get opto
             opto_cfg                                                = ROYAL_getOpto( core_cfg );
-            if opto_cfg.skip
+            if isempty(opto_cfg) || opto_cfg.skip
                 continue
             end
+
             data                                                    = opto_cfg.data;
             opto_cfg.opto.chantype                                  = data.hdr.chanunit;
             opto_cfg.opto.chanunit                                  = data.hdr.chanunit;
+            opto_cfg.opto.chantype(1,:)                             = [];   % I do not like that this is hardcoded
+            opto_cfg.opto.chanunit(1,:)                             = [];   % I do not like that this is hardcoded
             % opto                                                  = opto_cfg.opto;
             cfg.opto_cfg                                            = opto_cfg;
 
@@ -199,11 +209,14 @@ for subj                                = 1:core_cfg.numSubjects
             % cfg.channels.wavelength_emission_actual   = ...
             % cfg.channels.short_channel                = ...
 
-
+    
             cfg.core_cfg                                = core_cfg;
 
+            BIDS_config = cfg;
+            BIDS_config.bids_target_folder              = fullfile( core_cfg.bidsDir ); % , subjectID, sessionID );
+            ROYAL_xdf2bids(BIDS_config)
 
-            ROYAL_data2bids(cfg, data)
+            % ROYAL_data2bids(cfg, data)
         end
     end
 end

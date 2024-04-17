@@ -1576,7 +1576,7 @@ if need_optodes_tsv
 end % need_optodes_tsv
 
 %% need_coordsystem_json
-if need_coordsystem_json
+if need_coordsystem_json  % royal comment: this is scuffed and I do not know how to fix it for NIRS
     if isfield(hdr, 'grad') && ft_senstype(hdr.grad, 'ctf')
 
         % CTF empty-room recordings use the standard positions of the coils, as if they were measured

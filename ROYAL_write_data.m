@@ -1,4 +1,4 @@
-function ft_write_data(filename, dat, varargin)
+function ROYAL_write_data(filename, dat, varargin)
 
 % FT_WRITE_DATA exports electrophysiological data such as EEG to a file.
 %

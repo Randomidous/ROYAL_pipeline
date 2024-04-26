@@ -116,9 +116,9 @@ generalInfo.TaskDescription                         = 'text describing your task
 % will be saved in BIDS-folder/sub-XX/[ses-XX]/eeg/*_eeg.json and *_coordsystem.json
 
 nirsInfo     = [];
-nirsInfo.coordsystem.NIRSCoordinateSystem           = 'CapTrak';    
+nirsInfo.coordsystem.NIRSCoordinateSystem           = 'ICBM452Warp5Space';    
 nirsInfo.coordsystem.NIRSCoordinateUnits            = 'mm';                                             % only needed when you share eloc
-nirsInfo.coordsystem.EEGCoordinateSystemDescription = 'Chose CapTrak because it is RAS with origin between LPA and RPA';    % only needed when you share eloc
+nirsInfo.coordsystem.NIRSCoordinateSystemDescription = 'defaultDescription';    % only needed when you share eloc
 nirsInfo.CapManufacturer                   = 'NirX';
 nirsInfo.CapManufacturersModelName         = 'NIRSport2';
 
@@ -244,9 +244,8 @@ for subj                                = 1:core_cfg.numSubjects
 
 
             % nirs metadata
-            cfg.nirs                                    = [];
+            cfg.nirs                                    = nirsInfo;
             cfg.nirs.stream_name                        = 'Aurora';
-
 
 
             % get opto

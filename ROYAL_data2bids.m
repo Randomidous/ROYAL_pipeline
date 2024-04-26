@@ -317,7 +317,9 @@ cfg.channels      = ft_getopt(cfg, 'channels');
 cfg.electrodes    = ft_getopt(cfg, 'electrodes');
 cfg.optodes       = ft_getopt(cfg, 'optodes');
 cfg.events        = ft_getopt(cfg, 'events');     % this can contain the trial definition as Nx3 array, as table, or an event structure
+% cfg.coordsystem   = ft_getopt(cfg, 'automatic coordsystemsystem');
 cfg.coordsystem   = ft_getopt(cfg, 'coordsystem');
+
 
 %% Dataset description
 
@@ -1575,9 +1577,16 @@ if need_optodes_tsv
 
 end % need_optodes_tsv
 
+
 %% need_coordsystem_json
 if need_coordsystem_json  % royal comment: this is scuffed and I do not know how to fix it for NIRS
-    if isfield(hdr, 'grad') && ft_senstype(hdr.grad, 'ctf')
+
+    if need_nirs_json % a royal addition to add NIRS
+        if exist('cfg', 'var') && isfield(cfg, 'coordsystem')
+            coordsystem_json            = cfg.coordsystem;
+        end
+
+    elseif isfield(hdr, 'grad') && ft_senstype(hdr.grad, 'ctf')
 
         % CTF empty-room recordings use the standard positions of the coils, as if they were measured
         emptyroom = all(hdr.orig.hc.standard == hdr.orig.hc.dewar, [1 2]);

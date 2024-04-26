@@ -710,6 +710,20 @@ if importNIRS % This loop is always executed in current version
     
     % construct fieldtrip data
     nirs        = stream2ft(xdfnirs{1});
+
+    % check whether frame channel exists and delete it
+    indices_to_delete = [];     % a royal addition
+    for i = 1:numel(nirs.label)
+        if contains(nirs.label{i}, 'frame')
+            indices_to_delete = [indices_to_delete, i];
+        end
+    end
+    nirs.label(indices_to_delete) = [];
+    nirs.trial{1}(indices_to_delete, :) = []; % might have to do this for every trial
+    nirs.hdr.label(indices_to_delete) = [];
+    nirs.hdr.chantype(indices_to_delete) = [];
+    nirs.hdr.chanunit(indices_to_delete) = [];
+    nirs.hdr.nChans = nirs.hdr.nChans - numel(indices_to_delete);
     
     % save nirs start time
     nirsStartTime                = nirs.time{1}(1);

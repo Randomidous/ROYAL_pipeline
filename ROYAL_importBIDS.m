@@ -113,22 +113,22 @@ generalInfo.TaskDescription                         = 'text describing your task
 
 
 %% NIRS META DATA
-% will be saved in BIDS-folder/sub-XX/[ses-XX]/eeg/*_eeg.json and *_coordsystem.json
+% will be saved in BIDS-folder/sub-XX/[ses-XX]/nirs/*_nirs.json and *_coordsystem.json
 
 nirsInfo     = [];
-nirsInfo.coordsystem.NIRSCoordinateSystem           = 'ICBM452Warp5Space';    
-nirsInfo.coordsystem.NIRSCoordinateUnits            = 'mm';                                             % only needed when you share eloc
-nirsInfo.coordsystem.NIRSCoordinateSystemDescription = 'defaultDescription';    % only needed when you share eloc
-nirsInfo.CapManufacturer                   = 'NirX';
-nirsInfo.CapManufacturersModelName         = 'NIRSport2';
+nirsInfo.coordsystem.NIRSCoordinateSystem       = 'MNI152NLin2009aSym';    
+nirsInfo.coordsystem.NIRSCoordinateUnits        = 'mm';                                             % only needed when you share eloc
+nirsInfo.coordsystem.NIRSCoordinateSystemDescription = 'Nonlinear Symmetric RAS system';    % only needed when you share eloc
+nirsInfo.CapManufacturer                        = 'NirX';
+nirsInfo.CapManufacturersModelName              = 'NIRSport2';
 
-nirsInfo.nirs.SamplingFrequency                      = 10.172526298127810;                               % nominal sampling frequency  
-% nirsInfo.nirs.NIRSChannelCount                  = ft_getopt(cfg.nirs, 'NIRSChannelCount'                  );
-% nirsInfo.nirs.NIRSSourceOptodeCount             = ft_getopt(cfg.nirs, 'NIRSSourceOptodeCount'             );
-% nirsInfo.nirs.NIRSDetectorOptodeCount           = ft_getopt(cfg.nirs, 'NIRSDetectorOptodeCount'           );
-% nirsInfo.nirs.ACCELChannelCount                 = ft_getopt(cfg.nirs, 'ACCELChannelCount'                 );
-% nirsInfo.nirs.GYROChannelCount                  = ft_getopt(cfg.nirs, 'GYROChannelCount'                  );
-% nirsInfo.nirs.MAGNChannelCount                  = ft_getopt(cfg.nirs, 'MAGNChannelCount'                  );
+nirsInfo.nirs.SamplingFrequency                 = 10.172526298127810;                               % nominal sampling frequency  
+nirsInfo.nirs.NIRSChannelCount                  = 120;
+nirsInfo.nirs.NIRSSourceOptodeCount             = 8;
+nirsInfo.nirs.NIRSDetectorOptodeCount           = 15;
+nirsInfo.nirs.ACCELChannelCount                 = 0;
+nirsInfo.nirs.GYROChannelCount                  = 0;
+nirsInfo.nirs.MAGNChannelCount                  = 0;
 % nirsInfo.nirs.SourceType                        = ft_getopt(cfg.nirs, 'SourceType'                        );
 % nirsInfo.nirs.DetectorType                      = ft_getopt(cfg.nirs, 'DetectorType'                      );
 % nirsInfo.nirs.ShortChannelCount                 = ft_getopt(cfg.nirs, 'ShortChannelCount'                 );
@@ -192,8 +192,8 @@ nirsInfo.nirs.SamplingFrequency                      = 10.172526298127810;      
 
 %% MOTION META DATA
 
-%% PHYSIO META DATA
 
+%% PHYSIO META DATA
 
 
 %% data2bids specifications

@@ -1277,7 +1277,7 @@ if need_nirs_json
     if hdr.nTrials>1
         nirs_json.EpochLength           = hdr.nSamples/hdr.Fs;
     end
-    nirs_json.NIRSChannelCount          = sum(contains(hdr.chantype, 'nirs')); % a royal addition
+    nirs_json.NIRSChannelCount          = sum(contains(hdr.chantype, 'NIRS')); % a royal addition
     nirs_json.ACCELChannelCount         = sum(strcmpi(hdr.chantype, 'accel'));
     nirs_json.GYROChannelCount          = sum(strcmpi(hdr.chantype, 'gyro'));
     nirs_json.MAGNChannelCount          = sum(strcmpi(hdr.chantype, 'magn'));
@@ -1407,6 +1407,52 @@ if need_channels_tsv
 
     % channel information can come from the header and from cfg.channels
     channels_tsv = hdr2table(hdr); 
+
+
+% a royal addition start
+% THE COMING LINES ARE ONLY FOR ADDING SOURCE AND DETECTOR SPECIFICATIONS TO THE CHANNELS_TSV
+num_channels = size(opto.tra, 1);
+source = zeros(num_channels, 1);
+detector = zeros(num_channels, 1);
+for i = 1:num_channels % Extract source and detector indices
+    source_idx = find(opto.tra(i, :) == 1 | opto.tra(i, :) == 2);
+    detector_idx = find(opto.tra(i, :) == -1 | opto.tra(i, :) == -2);
+    if ~isempty(source_idx)
+        source(i) = source_idx;
+    end
+    if ~isempty(detector_idx)
+        detector(i) = detector_idx;
+    end
+end
+% Find and substract minimum value+1 to get proper detector index
+non_zero_detectors = detector(detector ~= 0);
+minimum_detector = min(non_zero_detectors);
+for i = 1:num_channels
+    if detector(i) ~= 0
+        detector(i) = detector(i) - minimum_detector + 1; % there must be a prettier solution
+    end
+end
+% Add to the table
+channels_tsv.source = num2cell(source);
+channels_tsv.detector = num2cell(detector);
+
+% THE COMING LINES ARE FOR ADDING WAVELENGTHS TO THE CHANNELS_TSV
+num_channels = size(opto.tra, 1);
+wavelength_for_tsv = zeros(num_channels, 1);
+for i = 1:num_channels
+    % Extract source and detector indices
+    if any(opto.tra(i, :) == 1)
+        wavelength_for_tsv(i) = opto.wavelength(1);
+    elseif any(opto.tra(i, :) == 2)
+        wavelength_for_tsv(i) = opto.wavelength(2);
+    end
+end
+% Add to the table
+channels_tsv.wavelength_nominal = num2cell(wavelength_for_tsv);
+channels_tsv.wavelength_actual = num2cell(wavelength_for_tsv);
+% a royal addition end
+
+
     channels_tsv = mergetable(channels_tsv, cfg.channels, 'name');
     % channels_tsv = cfg.channels; % a royal addition
 

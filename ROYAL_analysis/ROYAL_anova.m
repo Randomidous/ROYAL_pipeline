@@ -133,33 +133,35 @@ write_anova_results_to_file(filename_without_outliers, ranova_results_withoutOut
 
 
 %% Plot the results
-
-% Determine the y-axis limits based on the combined data
-combined_data = [anova_data_withOutlier(:); anova_data_withoutOutliers(:)];
-y_limits = [min(combined_data) - 0.00001, max(combined_data) + 0.00001];
-
-% With outliers
-figure('Units', 'normalized', 'OuterPosition', [0 0 1 1]);
-subplot(1, 2, 1);
-boxchart(anova_data_withOutlier, 'LineWidth', 1.5, 'notch', 'off');
-set(gca, 'XTickLabel', tasks);
-ylabel('HbO Value');
-title('HbO Value Distribution per Task (With Outliers)');
-ylim(y_limits); % Set y-axis limits
-
-% Calculate and plot the means
-hold on;
-mean_values_with = mean(anova_data_withOutlier, 'omitnan');
-plot(1:length(tasks), mean_values_with, 'black.', 'MarkerSize', 10);
-hold off;
+% 
+% % Determine the y-axis limits based on the combined data
+% combined_data = [anova_data_withOutlier(:); anova_data_withoutOutliers(:)];
+% y_limits = [min(combined_data) - 0.00001, max(combined_data) + 0.00001];
+% 
+% % With outliers
+% figure('Units', 'normalized', 'OuterPosition', [0 0 1 1]);
+% subplot(1, 2, 1);
+% boxchart(anova_data_withOutlier, 'LineWidth', 1.5, 'notch', 'off');
+% set(gca, 'XTickLabel', tasks);
+% ylabel('HbO Value');
+% title('HbO Value Distribution per Task (With Outliers)');
+% ylim(y_limits); % Set y-axis limits
+% 
+% % Calculate and plot the means
+% hold on;
+% mean_values_with = mean(anova_data_withOutlier, 'omitnan');
+% plot(1:length(tasks), mean_values_with, 'black.', 'MarkerSize', 10);
+% hold off;
 
 % Without outliers
-subplot(1, 2, 2);
+figure('Units', 'normalized', 'OuterPosition', [0 0 1 1]);
+
+% subplot(1, 2, 2);
 boxchart(anova_data_withoutOutliers, 'LineWidth', 1.5, 'notch', 'off');
 set(gca, 'XTickLabel', tasks);
 ylabel('HbO Value');
 title('HbO Value Distribution per Task (Without Outliers)');
-ylim(y_limits); % Set y-axis limits
+% ylim(y_limits); % Set y-axis limits
 
 % Calculate and plot the means
 hold on;
@@ -173,9 +175,9 @@ output_path = fullfile(data_path, 'derivatives', 'figures');
 if ~exist(output_path, 'dir')
     mkdir(output_path);
 end
-saveas(gcf, fullfile(output_path, 'hbo_values_boxplots_anova.png'));
+saveas(gcf, fullfile(output_path, 'hbo_values_boxplots__withoutOutlier_anova_big.png'));
 close gcf
-
+   
 %% Export data to CSV for use in R
 
 % Define the output directory for the CSV file

@@ -4,6 +4,7 @@ data_path = 'C:\Users\ericw\Desktop\UHH_fNIRS\study_folder\data\1_BIDS-data';
 derivatives_path = fullfile(data_path, 'derivatives');
 load(fullfile(derivatives_path, 'processed_data.mat'), 'results');
 fprintf('Results loaded successfully!\n');
+fs = 10.172526298127810; % Sampling frequency
 
 % List of subjects
 subjects = dir(fullfile(data_path, 'sub-*'));

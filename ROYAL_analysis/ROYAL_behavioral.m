@@ -6,6 +6,8 @@ rootDir = 'C:\Users\ericw\Desktop\UHH_fNIRS\study_folder\data\1_BIDS-data';
 numSubjects = 29;
 sessions = {'pre'}; % {'pre', 'post'};
 tasks = {'STvisual', 'DTwalking'}; % Only interested in STvisual and DTwalking
+data_path = 'C:\Users\ericw\Desktop\UHH_fNIRS\study_folder\data\1_BIDS-data';
+
 
 % Initialize a structure to store the filtered events data and analysis results
 filteredEventsData = struct();
@@ -200,5 +202,15 @@ if ~exist(output_path, 'dir')
     mkdir(output_path);
 end
 saveas(gcf, fullfile(output_path, 'behav_response_analysis.png'));
-% close gcf
+close gcf
+
+%% Conduct t-tests on the STvisual and DTwalking values for Corrected Response Rate and Average Response Time
+
+% Corrected Response Rate t-test
+[~, p_correctedRate, ~, stats_correctedRate] = ttest(correctResponseRatesSTvisual, correctResponseRatesDTwalking);
+fprintf('Corrected Response Rate t-test: t(%d) = %.2f, p = %.4f\n', stats_correctedRate.df, stats_correctedRate.tstat, p_correctedRate);
+
+% Average Response Time t-test
+[~, p_avgResponseTime, ~, stats_avgResponseTime] = ttest(avgResponseTimesSTvisual, avgResponseTimesDTwalking);
+fprintf('Average Response Time t-test: t(%d) = %.2f, p = %.4f\n', stats_avgResponseTime.df, stats_avgResponseTime.tstat, p_avgResponseTime);
 

@@ -11,7 +11,7 @@ subjects = dir(fullfile(data_path, 'sub-*'));
 
 % Define tasks and sessions
 tasks = {'baseline', 'STwalking', 'DTwalking', 'STvisual'};
-sessions = {'ses-pre', 'ses-post'};
+sessions = {'ses-pre'}; %, 'ses-post'};
 
 % Initialize variables to store HbO values for ANOVA
 num_subjects = length(subjects);
